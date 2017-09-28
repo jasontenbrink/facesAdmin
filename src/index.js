@@ -3,9 +3,6 @@ import {Provider} from 'react-redux';
 import {ReactDom, render} from 'react-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {HashRouter as Router, Route, Link} from 'react-router-dom'
-import TenantsList from './TenantsList'
-import AddTenant from './routes/AddTenant'
-import EditTenant from './routes/EditTenant'
 import Main from './Main'
 import store from './state/store'
 
@@ -16,13 +13,11 @@ const flexContainer = {
 const app = document.getElementById('app');
 render(
     <MuiThemeProvider>
-    <Provider store={store}>
-        
+        <Provider store={store}>
             <Router>
                 <Main />
             </Router>
-        
-    </Provider>   
+        </Provider>
     </MuiThemeProvider>
     , app
 )

@@ -23,8 +23,8 @@ const api = {
     addTenant(){
 
     },
-    editTenant(){
-
+    updateTenant(tenant){
+        
     }
 };
 

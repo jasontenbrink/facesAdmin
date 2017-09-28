@@ -4,14 +4,14 @@ const api = {
     getTenants(){
         return axios.get('/tenants');
     },
-    deleteTenant(){
-
+    deleteTenant(id){
+        return axios.delete('/tenants', {params: {id}})
     },
-    addTenant(){
-
+    addTenant(name){
+        return axios.post('/tenants', {name});
     },
-    editTenant(){
-
+    updateTenant(tenant){
+        return axios.put('/tenants', {tenant})
     }
 };
 

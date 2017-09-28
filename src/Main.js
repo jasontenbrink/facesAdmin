@@ -1,10 +1,11 @@
 import React from 'react'
-import {Route} from 'react-router-dom'
+import {Route, Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import TenantsList from './TenantsList'
 import AddTenant from './routes/AddTenant'
 import EditTenant from './routes/EditTenant'
 import api from './apis/MockApis'
+import { withRouter } from 'react-router-dom'
 
 const flexContainer = {
     display: "flex"
@@ -16,7 +17,7 @@ function mapStateToProps (state){
     }
 }
 
-export default connect(mapStateToProps)
+export default withRouter(connect(mapStateToProps)
 (class Main extends React.Component{
     constructor(props){
         super(props);
@@ -49,4 +50,4 @@ export default connect(mapStateToProps)
 
         )
     }
-});
+}));

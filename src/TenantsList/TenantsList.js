@@ -9,7 +9,6 @@ function mapStateToProps(state){
 }
 export default connect(mapStateToProps)
 (function ({tenants}){
-    console.log('tenants', tenants);
     return (
         <div style={{display: "flex", flexDirection: "column"}}>
             {tenants.map(tenant => (
