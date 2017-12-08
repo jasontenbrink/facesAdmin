@@ -45,11 +45,11 @@ function* addTenant(action){
     yield put({type: "ADD_TENANT_START"});
     try {
         const {data} = yield api.addTenant(action.value);
-        const newData = {
-            name: data[0].tenant_name,
-            id: data[0].tenant_id
+        const tenant = {
+            name: data.tenant_name,
+            id: data.tenant_id
         };
-        yield put({type: "ADD_TENANT_SUCCESS", value: newData});
+        yield put({type: "ADD_TENANT_SUCCESS", value: tenant});
     }
     catch(err){
         yield put({type: "ADD_TENANT_FAILURE", err});

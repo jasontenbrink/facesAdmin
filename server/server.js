@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const util = require ('util');
 const pgQuery = require('pg-query');
+const bcrypt = require('bcrypt');
+const database = require('./dbQueries');
+const SALT_FACTOR = 10;
 
 /*jshint multistr: true */
 app.use(bodyParser.json());
@@ -16,7 +19,7 @@ pgQuery.connectionParameters = 'postgres://localhost:5432/noraChurch'; //local
 
 app.use(express.static (path.join(__dirname, '../dist')));
 
-app.set('port', process.env.PORT || 8000);
+app.set('port', process.env.PORT || 2000);
 
 app.route('/tenants')
 .get((req, res) => {
@@ -29,14 +32,21 @@ app.route('/tenants')
   });
 })
 .post((req, res) => {
-  console.log('post', req.body);
-  pgQuery(`INSERT INTO tenants (tenant_name) 
-    VALUES ($1) 
-    RETURNING *`, 
-    [req.body.name]
-  )
-  .then(rows => res.json(rows[0]))
-  .catch(err => res.status(424).send('failed dependancy!'));
+  let tenant;
+  const promise1 = database.addTenant(req.body.name);
+  const promise2 = bcrypt.hash(process.env.ADMIN_PASSWORD, SALT_FACTOR);
+  Promise.all([promise1, promise2])
+  .then(([rows, hash]) => {
+    tenant = rows[0][0];
+    return database.createAdminUser(tenant, hash);
+  })
+  .then(rows => {
+    return res.json(tenant) 
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(424).send('failed dependancy!');
+  });
 })
 .put((req, res) => {
   console.log('put', req.body);
@@ -61,7 +71,7 @@ app.route('/tenants')
   .then(rows => res.json(rows[0]))
   .catch(err => res.status(424).send('failed dependancy!'));
 });
-
+console.log('hi mom', app.get('port'));
 app.listen(app.get('port'), function () {
   util.log(' listening on port ', app.get('port'));
 });
